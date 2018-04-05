@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 public class windowGUI implements ActionListener{
 
     JButton convertButton, resetButton;
@@ -19,8 +20,8 @@ public class windowGUI implements ActionListener{
         JFrame window = new JFrame("Astrology Unit Converter");
         window.setSize(width,height);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setVisible(true);
         window.setLayout(null);
+        window.setResizable(false);
 
         convertButton = new JButton("Convert");
         convertButton.setBounds(70,100,100,20);
@@ -33,6 +34,7 @@ public class windowGUI implements ActionListener{
         convertResult.setBackground(Color.BLUE);
 
         amountText = new JTextField();
+        amountText.setText("Enter value");
         amountText.setBounds(20,60,150,20);
 
         firstCombo = new JComboBox(units);
@@ -47,6 +49,7 @@ public class windowGUI implements ActionListener{
         window.add(convertResult);
         window.add(resetButton);
         window.add(convertButton);
+        window.setVisible(true);
         convertButton.addActionListener(this);
         resetButton.addActionListener(this);
 
@@ -58,15 +61,21 @@ public class windowGUI implements ActionListener{
     ConvertingPart convertingObject ;
         if(buttonClick == convertButton){
 
+                double textField;
                String unit1 = firstCombo.getSelectedItem().toString();
                String unit2 = secondCombo.getSelectedItem().toString();
 
-
-                    convertingObject = new ConvertingPart(Double.parseDouble(amountText.getText()),unit1,unit2);
-                    convertResult.setText(Double.toString(convertingObject.conResult()));
-
-
+               try {
+                  textField = Double.parseDouble(amountText.getText());
+                  convertingObject = new ConvertingPart(textField, unit1, unit2);
+                   convertResult.setText(String.valueOf(convertingObject.conResult().doubleValue()));
+               }catch(NumberFormatException ex){
+                   convertResult.setForeground(Color.RED);
+                   convertResult.setText("<--Wrong");
+               }
         }
+
+
         else if(buttonClick == e.getSource()) {
             convertResult.setText("");
             amountText.setText("");
